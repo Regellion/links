@@ -3,18 +3,27 @@ import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
 import java.util.*;
+import java.util.concurrent.ForkJoinPool;
 
 public class Main {
     private static Set<String> uniqueURL = new HashSet<>();
     private static final String siteURL = "https://skillbox.ru/";
 
     public static void main(String[] args) {
-        getLinks(siteURL, "");
+        //Однопоточный режим
+        //getLinks(siteURL, "");
         //uniqueURL.forEach(System.out::println);
-        System.out.println(uniqueURL.size());
+        //System.out.println(uniqueURL.size());
+
+
+        // Многопоточный режим
+        WalkLink walkLink = new WalkLink(siteURL, "");
+        new ForkJoinPool().invoke(walkLink);
+
     }
 
     private static void getLinks(String pageUrl, String tab) {
+
         // добавляем введеную ссылку
         uniqueURL.add(pageUrl);
         System.out.println(tab + pageUrl);
